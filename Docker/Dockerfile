@@ -16,20 +16,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-WORKDIR /var/www/example-app
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
 
-# RUN git clone https://github.com/laravel/laravel.git
-
-RUN composer create-project laravel/laravel "/var/www/example-app" --prefer-dist
-
-# COPY ./ ./
-
-# RUN rm ./vendor/compiled.php
-
-# RUN composer update
-
-# RUN php artisan sail:install --with=mysql,redis,meilisearch,mailhog,selenium
-
-# RUN ./vendor/bin/sail pull mysql redis meilisearch mailhog selenium && ./vendor/bin/sail build
-
-EXPOSE 80
+COPY --chown=www:www-data . /var/www
